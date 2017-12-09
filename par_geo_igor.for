@@ -13,12 +13,14 @@ C     MAIN PROGRAM FOR GEO VARIANT - 1
      1,yrad(106)
       COMMON/ MEN/ MM(10),NN(10),MN(6)
       COMMON/GEO/ H,R,D,D1
-	DIMENSION QAA(6,6,6),QBB(3,3,3,3)
+	DIMENSION QAA(6,6,6),QBB(3,3,3,3), y10(10)
       COMMON/BC/ GAC(6,6,10),DEC(3,3,3,10),HHC(3,3,3,3,10),
      1VV1(10,10),VV2(10,10,10),VV3(10,10,10,10),UU1(3,10),UU2(3,10,10),
      2UU3(3,10,10,10),UU4(3,10,10,10,10),WW1(10),WW2(10),WW3(6,6,10),
      3WW4(3,3,3,10),VZ2(6,6,10),VZ3(3,3,3,10),UZ2(3,10,10),
      4UZ3(3,6,6,10),UZ4(3,3,3,3,10),PN(110,6)
+      DOUBLE PRECISION FS, FGP, FGPP
+      COMMON/EP/GAV(10,10,10), ANN(10)                                                          
       CALL WGL
 	
       N3=3
@@ -67,64 +69,65 @@ C NF is number of coordinate functions entrained for solving the linear problem
       CALL VUGEO(H,R)
 C   Calculation of integrals in angular direction
 	open(777,file='res.xls')
-	open(551,file='coef.xls')
-	open(888,file='resm.xls')
-	open(999,file='vel.xls')
-	open(890,file='time.xls')
-      open(891,file='a1.xls')
-	open(892,file='a2.xls')
-	open(893,file='a3.xls')
-	open(894,file='a4.xls')
-	open(895,file='a5.xls')
-	open(896,file='a6.xls')
-	open(897,file='a7.xls')
-	open(898,file='a8.xls')
-	open(899,file='a9.xls')
-	open(900,file='a10.xls')
-	open(491,file='v1.xls')
-	open(492,file='v2.xls')
-	open(493,file='v3.xls')
-	open(494,file='v4.xls')
-	open(495,file='v5.xls')
-	open(496,file='v6.xls')
-	open(497,file='v7.xls')
-	open(498,file='v8.xls')
-	open(499,file='v9.xls')
-      open(889,file='prob.xls')
-	open(812,file='ry.xls')
-	open(811,file='rx.xls')
-	open(813,file='rz.xls')
-	open(500,file='psi.xls')
-	open(555,file='obr.xls')
-	open(556,file='yrad.xls')
+!	open(551,file='coef.xls')
+!	open(888,file='resm.xls')
+!	open(999,file='vel.xls')
+!	open(890,file='time.xls')
+      open(891,file='ampli.txt')
+	open(892,file='perem.txt')
+	open(893,file='sily.txt')
+!	open(894,file='a4.xls')
+!	open(895,file='a5.xls')
+!	open(896,file='a6.xls')
+!	open(897,file='a7.xls')
+!	open(898,file='a8.xls')
+!	open(899,file='a9.xls')
+!	open(900,file='a10.xls')
+!	open(491,file='v1.xls')
+!	open(492,file='v2.xls')
+!	open(493,file='v3.xls')
+!	open(494,file='v4.xls')
+!	open(495,file='v5.xls')
+!	open(496,file='v6.xls')
+!	open(497,file='v7.xls')
+!	open(498,file='v8.xls')
+!	open(499,file='v9.xls')
+!      open(889,file='prob.xls')
+!	open(812,file='ry.xls')
+!	open(811,file='rx.xls')
+!	open(813,file='rz.xls')
+!	open(500,file='psi.xls')
+!	open(555,file='obr.xls')
+!	open(556,file='yrad.xls')
 ! используетс€ столбцы ось х - права€ ветка параболоида obr.xls
 ! ось у yrad.xls, отсортированный по возрастанию
-	open(333,file='en.xls')
+!	open(333,file='en.xls')
 !     rf0right - точки на круге
 !     psf0right - свободна€ поверхность 
-	open(111,file='rf0right.xls')
-	open(222,file='psf0right.xls')
-      open(711,file='rf0left.xls')
-	open(722,file='psf0left.xls')
-	open(700,file='psf0.xls')
-	open(707,file='psfw.xls')
-      open(1077,file='time_psf.xls')
+!	open(111,file='rf0right.xls')
+!	open(222,file='psf0right.xls')
+!      open(711,file='rf0left.xls')
+!	open(722,file='psf0left.xls')
+!	open(700,file='psf0.xls')
+!	open(707,file='psfw.xls')
+!      open(1077,file='time_psf.xls')
+      open(299,file='ksi.txt')
 
-      open(2500,file='POINT-psi-time.xls')
-      open(2700,file='POINT-psf0-centre.xls')
-      open(2022,file='POINT-psf0right-180.xls')
-	open(2707,file='POINT-psf0t-wall.xls')
+!      open(2500,file='POINT-psi-time.xls')
+!      open(2700,file='POINT-psf0-centre.xls')
+!      open(2022,file='POINT-psf0right-180.xls')
+!	open(2707,file='POINT-psf0t-wall.xls')
 
-	open(1011,file='rf0right-180.xls')
-	open(1022,file='psf0right-180.xls')
-      open(1071,file='rf0left-180.xls')
-	open(1072,file='psf0left-180.xls')
+!	open(1011,file='rf0right-180.xls')
+!	open(1022,file='psf0right-180.xls')
+!      open(1071,file='rf0left-180.xls')
+!	open(1072,file='psf0left-180.xls')
 	
-	open(122,file='ps0_ps2_ps3.xls')
-      WRITE (889,104),MN
-  104 FORMAT(10X,' M      ', 7I4)
-      WRITE (777,106),CHA
-      WRITE (889,106),CHA
+!	open(122,file='ps0_ps2_ps3.xls')
+!      WRITE (889,104),MN
+!  104 FORMAT(10X,' M      ', 7I4)
+!      WRITE (777,106),CHA
+!      WRITE (889,106),CHA
    
   106 FORMAT(3X,'Frequencies',6f12.5)
       WRITE (888,106),CHA
@@ -134,7 +137,7 @@ C   Calculation of integrals in angular direction
       CALL VNGEO(N1,N2,N3)
       PRINT 401
   401 FORMAT (3x, 'proshla VL,VM,VP,VN')
-      WRITE(777,401)
+!      WRITE(777,401)
 !      DO 10 J=1,7
       DO 10 J=1,8
       W0=PI*0.25*(J-1)
@@ -149,122 +152,122 @@ C   Calculation of integrals in angular direction
       DO 11 I=1,6
    11 RPV(I,J)=FS(0,1,W0,0.D0,I,NF)
 
-      WRITE (777,402)
-  402 FORMAT(13X,' ARRAY RPV',/)
+!      WRITE (777,402)
+!  402 FORMAT(13X,' ARRAY RPV',/)
       
-  202 FORMAT(13X,' ARRAY ',/)
-      WRITE (777,201),VV1
+!  202 FORMAT(13X,' ARRAY ',/)
+!      WRITE (777,201),VV1
 
-  226 FORMAT(960x,960f8.3)
+!  226 FORMAT(960x,960f8.3)
  
 !!!!!!!!!!!!!!!!!!!!!!!!!!
 !     ƒл€  h=1
- 1110 FORMAT(13X,' Beta(1,1)= (MU1 = 0,6325 ) = ',F12.4)
-      WRITE (551,1110),VV1(1,1)
- 1111 FORMAT(13X,' Beta(2,2)= (MU1 = 0,6325 = ) ',F12.4)
-      WRITE (551,1111),VV1(2,2)
- 1112 FORMAT(13X,' Beta(3,3)= (MU0 = 0,8207 = ) ',F12.4)
-      WRITE (551,1112),VV1(3,3)
+! 1110 FORMAT(13X,' Beta(1,1)= (MU1 = 0,6325 ) = ',F12.4)
+!      WRITE (551,1110),VV1(1,1)
+! 1111 FORMAT(13X,' Beta(2,2)= (MU1 = 0,6325 = ) ',F12.4)
+!      WRITE (551,1111),VV1(2,2)
+! 1112 FORMAT(13X,' Beta(3,3)= (MU0 = 0,8207 = ) ',F12.4)
+!      WRITE (551,1112),VV1(3,3)
 
- 1113 FORMAT(13X,' Beta(4,4)= (MU2 = 0,2951 = )',F12.4)
-      WRITE (551,1113),VV1(4,4)
- 1114 FORMAT(13X,' Beta(5,5)= (MU2 = 0,2951 = )',F12.4)
-      WRITE (551,1114),VV1(5,5)
+! 1113 FORMAT(13X,' Beta(4,4)= (MU2 = 0,2951 = )',F12.4)
+!      WRITE (551,1113),VV1(4,4)
+! 1114 FORMAT(13X,' Beta(5,5)= (MU2 = 0,2951 = )',F12.4)
+!      WRITE (551,1114),VV1(5,5)
  
       
- 1119 FORMAT(13X,' VV2(1,2,4)= ( D3 = 0,6403) = ',F12.4)
- 1120 FORMAT(13X,' VV2(1,3,1)= ( D6 =-0,0433) = ',F12.4)
- 1121 FORMAT(13X,' VV2(1,1,3)= ( D5 = 1,0390) = ',F12.4)
- 1122 FORMAT(13X,' VV2(1,4,2)= (-D4 = 0,0560) = ',F12.4)
- 1123 FORMAT(13X,' VV2(1,5,1)= ( D4 =-0,0560) = ',F12.4)
- 1124 FORMAT(13X,' VV2(1,1,5)= (-D3 =-0,6403) = ',F12.4)
- 1125 FORMAT(13X,' VV2(2,3,2)= (-D6 = 0,0433) = ',F12.4)
- 1126 FORMAT(13X,' VV2(2,2,3)= ( D5 = 1,0390) = ',F12.4)
- 1127 FORMAT(13X,' VV2(2,4,1)= (-D4 = 0,0560) = ',F12.4)
- 1128 FORMAT(13X,' VV2(2,5,2)= (-D4 = 0,0560) = ',F12.4)
- 1129 FORMAT(13X,' VV2(2,1,4)= ( D3 = 0,6403) = ',F12.4)
- 1130 FORMAT(13X,' VV2(2,2,5)= ( D3 = 0,6403) = ',F12.4)
- 1131 FORMAT(13X,' VV2(3,2,2)= ( D6 =-0,0433) = ',F12.4)
- 1132 FORMAT(13X,' VV2(3,1,1)= ( D6 =-0,0433) = ',F12.4)
- 1133 FORMAT(13X,' VV2(4,2,1)= (-D4 = 0,0560) = ',F12.4)
- 1134 FORMAT(13X,' VV2(4,1,2)= (-D4 = 0,0560) = ',F12.4)
- 1135 FORMAT(13X,' VV2(5,2,2)= (-D4 = 0,0560) = ',F12.4)
- 1136 FORMAT(13X,' VV2(5,1,1)= ( D4 =-0,0560) = ',F12.4)
-      WRITE (551,1119),VV2(1,2,4)
-      WRITE (551,1120),VV2(1,3,1)
-	WRITE (551,1121),VV2(1,1,3)
-	WRITE (551,1122),VV2(1,4,2)   
-	WRITE (551,1123),VV2(1,5,1)   
-	WRITE (551,1124),VV2(1,1,5)   
-	WRITE (551,1125),VV2(2,3,2)   
-	WRITE (551,1126),VV2(2,2,3)   
-	WRITE (551,1127),VV2(2,4,1)   
-	WRITE (551,1128),VV2(2,5,2)   
-	WRITE (551,1129),VV2(2,1,4)   
-	WRITE (551,1130),VV2(2,2,5)   
-	WRITE (551,1131),VV2(3,2,2)
-	WRITE (551,1132),VV2(3,1,1)
-	WRITE (551,1133),VV2(4,2,1)
-	WRITE (551,1134),VV2(4,1,2)
-	WRITE (551,1135),VV2(5,2,2)
-	WRITE (551,1136),VV2(5,1,1)
+! 1119 FORMAT(13X,' VV2(1,2,4)= ( D3 = 0,6403) = ',F12.4)
+! 1120 FORMAT(13X,' VV2(1,3,1)= ( D6 =-0,0433) = ',F12.4)
+! 1121 FORMAT(13X,' VV2(1,1,3)= ( D5 = 1,0390) = ',F12.4)
+! 1122 FORMAT(13X,' VV2(1,4,2)= (-D4 = 0,0560) = ',F12.4)
+! 1123 FORMAT(13X,' VV2(1,5,1)= ( D4 =-0,0560) = ',F12.4)
+! 1124 FORMAT(13X,' VV2(1,1,5)= (-D3 =-0,6403) = ',F12.4)
+! 1125 FORMAT(13X,' VV2(2,3,2)= (-D6 = 0,0433) = ',F12.4)
+! 1126 FORMAT(13X,' VV2(2,2,3)= ( D5 = 1,0390) = ',F12.4)
+! 1127 FORMAT(13X,' VV2(2,4,1)= (-D4 = 0,0560) = ',F12.4)
+! 1128 FORMAT(13X,' VV2(2,5,2)= (-D4 = 0,0560) = ',F12.4)
+! 1129 FORMAT(13X,' VV2(2,1,4)= ( D3 = 0,6403) = ',F12.4)
+! 1130 FORMAT(13X,' VV2(2,2,5)= ( D3 = 0,6403) = ',F12.4)
+! 1131 FORMAT(13X,' VV2(3,2,2)= ( D6 =-0,0433) = ',F12.4)
+! 1132 FORMAT(13X,' VV2(3,1,1)= ( D6 =-0,0433) = ',F12.4)
+! 1133 FORMAT(13X,' VV2(4,2,1)= (-D4 = 0,0560) = ',F12.4)
+! 1134 FORMAT(13X,' VV2(4,1,2)= (-D4 = 0,0560) = ',F12.4)
+! 1135 FORMAT(13X,' VV2(5,2,2)= (-D4 = 0,0560) = ',F12.4)
+! 1136 FORMAT(13X,' VV2(5,1,1)= ( D4 =-0,0560) = ',F12.4)
+!      WRITE (551,1119),VV2(1,2,4)
+!      WRITE (551,1120),VV2(1,3,1)
+!	WRITE (551,1121),VV2(1,1,3)
+!	WRITE (551,1122),VV2(1,4,2)   
+!	WRITE (551,1123),VV2(1,5,1)   
+!	WRITE (551,1124),VV2(1,1,5)   
+!	WRITE (551,1125),VV2(2,3,2)   
+!	WRITE (551,1126),VV2(2,2,3)   
+!	WRITE (551,1127),VV2(2,4,1)   
+!	WRITE (551,1128),VV2(2,5,2)   
+!	WRITE (551,1129),VV2(2,1,4)   
+!	WRITE (551,1130),VV2(2,2,5)   
+!	WRITE (551,1131),VV2(3,2,2)
+!	WRITE (551,1132),VV2(3,1,1)
+!	WRITE (551,1133),VV2(4,2,1)
+!	WRITE (551,1134),VV2(4,1,2)
+!	WRITE (551,1135),VV2(5,2,2)
+!	WRITE (551,1136),VV2(5,1,1)
 
- 1137 FORMAT(13X,' Delta(1,1,1,1)= (D1 = 0,3920 ) = ',F12.4)
-      WRITE (551,1137),VV3(1,1,1,1)
- 1138 FORMAT(13X,' Delta(1,1,2,2)= (D2 =-0,2416 ) = ',F12.4)
-      WRITE (551,1138),VV3(1,1,2,2)
- 1139 FORMAT(13X,' Delta(1,2,1,2)+Delta(1,2,2,1)=(D1-D2=0,6340)=',F12.4)
-      WRITE (551,1139),VV3(1,2,1,2)+VV3(1,2,1,2)
- 1140 FORMAT(13X,' Delta(2,1,1,2)-Delta(2,2,1,2)=(D1-D2=0,6340)=',F12.4)
-      WRITE (551,1140),VV3(2,1,1,2)+VV3(2,1,2,1)
- 1141     FORMAT(13X,' Delta(1,2,1,2)= (D2 = ) = ',F12.4)
-      WRITE (551,1141),VV3(1,2,1,2)     
- 1142    FORMAT(13X,' Delta(1,2,2,1)= (D2 = ) = ',F12.4)
-      WRITE (551,1142),VV3(1,2,2,1)     
- 1143    FORMAT(13X,' Delta(2,1,1,2)= (D2 = ) = ',F12.4)
-      WRITE (551,1143),VV3(2,1,1,2)     
- 1144    FORMAT(13X,' Delta(2,2,1,2)= (D2 = ) = ',F12.4)
-      WRITE (551,1144),VV3(2,1,2,1)     
+! 1137 FORMAT(13X,' Delta(1,1,1,1)= (D1 = 0,3920 ) = ',F12.4)
+!      WRITE (551,1137),VV3(1,1,1,1)
+! 1138 FORMAT(13X,' Delta(1,1,2,2)= (D2 =-0,2416 ) = ',F12.4)
+!      WRITE (551,1138),VV3(1,1,2,2)
+! 1139 FORMAT(13X,' Delta(1,2,1,2)+Delta(1,2,2,1)=(D1-D2=0,6340)=',F12.4)
+!      WRITE (551,1139),VV3(1,2,1,2)+VV3(1,2,1,2)
+! 1140 FORMAT(13X,' Delta(2,1,1,2)-Delta(2,2,1,2)=(D1-D2=0,6340)=',F12.4)
+!      WRITE (551,1140),VV3(2,1,1,2)+VV3(2,1,2,1)
+! 1141     FORMAT(13X,' Delta(1,2,1,2)= (D2 = ) = ',F12.4)
+!      WRITE (551,1141),VV3(1,2,1,2)     
+! 1142    FORMAT(13X,' Delta(1,2,2,1)= (D2 = ) = ',F12.4)
+!      WRITE (551,1142),VV3(1,2,2,1)     
+! 1143    FORMAT(13X,' Delta(2,1,1,2)= (D2 = ) = ',F12.4)
+!      WRITE (551,1143),VV3(2,1,1,2)     
+! 1144    FORMAT(13X,' Delta(2,2,1,2)= (D2 = ) = ',F12.4)
+!      WRITE (551,1144),VV3(2,1,2,1)     
 
             
- 1202 FORMAT(13X,'/ ARRAY vv2',/)    
- 1203 FORMAT(13X,'/ ARRAY vv3',/)  
+! 1202 FORMAT(13X,'/ ARRAY vv2',/)    
+! 1203 FORMAT(13X,'/ ARRAY vv3',/)  
   
-	PRINT 202
-	WRITE (551, 202)
+!	PRINT 202
+!	WRITE (551, 202)
       
-	PRINT 201,VV1
-      WRITE (551,201),VV1
-      PRINT 1202
-	WRITE (551,1202)
+!	PRINT 201,VV1
+!      WRITE (551,201),VV1
+!      PRINT 1202
+!	WRITE (551,1202)
      
-      WRITE (551,201),VV2
+!      WRITE (551,201),VV2
 
-	WRITE (551,1203)
+!	WRITE (551,1203)
 	      
-       WRITE (551,201),VV3
+!       WRITE (551,201),VV3
 !!!!!!!!!!!!!!!!!!!!!!!!!
  
-  201 FORMAT(3X,10F12.7)
-      PRINT 202
-   	WRITE (777,202)
-      DO 81 I=1,N2
-      DO 81 J=1,N2
-      DO 81 K=1,N2
-   81 QAA(J,I,K)=VV2(I,J,K)/VV1(J,J)
-      DO 82 I=1,N3
-      DO 82 J=1,N3
-      DO 82 K=1,N3
-      DO 82 L=1,N3
-   82 QBB(J,I,K,L)=VV3(I,J,K,L)/VV1(J,J)
-      PRINT 201,QAA
-      WRITE (777,201), QAA
-	PRINT 202
-	WRITE (777,202)
-      PRINT 201,QBB
-      WRITE (777,201), QBB
-      PRINT 202
-	WRITE (777,202)
+!  201 FORMAT(3X,10F12.7)
+!      PRINT 202
+!   	WRITE (777,202)
+!      DO 81 I=1,N2
+!      DO 81 J=1,N2
+!      DO 81 K=1,N2
+!   81 QAA(J,I,K)=VV2(I,J,K)/VV1(J,J)
+!      DO 82 I=1,N3
+!      DO 82 J=1,N3
+!      DO 82 K=1,N3
+!      DO 82 L=1,N3
+!   82 QBB(J,I,K,L)=VV3(I,J,K,L)/VV1(J,J)
+!      PRINT 201,QAA
+!      WRITE (777,201), QAA
+!	PRINT 202
+!	WRITE (777,202)
+!      PRINT 201,QBB
+!      WRITE (777,201), QBB
+!      PRINT 202
+!	WRITE (777,202)
 	 
       RMG=PI*ROG*GI(-H,0.D0,ARG)
       RMR=0.2*RMG
@@ -275,50 +278,93 @@ C   Calculation of integrals in angular direction
 !      Y(2)=0.02 *R1
       Y(1)=0.
 	PRINT 410
-	WRITE (777,410)
+!	WRITE (777,410)
   410 FORMAT (2x, 'doshla do runge-kutta')
   	PRINT 411, Y
-	WRITE (777,411), Y
+!	WRITE (777,411), Y
   411 FORMAT (2x, 10F10.7)
    13 CALL VRRKKS(T,Y,HH,N9,VRGEO,YY,RR,Z)
             CALL VENERGY(T,Y,N9,N1)
       TT=N5*HH
 
-      PRINT 420, Y(2),Y(3)
-	WRITE (777,420), Y(2),Y(3)
+!      PRINT 420, Y(2),Y(3)
+!	WRITE (777,420), Y(2),Y(3)
   420 FORMAT (2x, f14.5, 3x, F14.7)
-	WRITE (777,101),TT
+!	WRITE (777,101),TT
 	Print 101,TT
-      WRITE (890,102),TT
+!      WRITE (890,102),TT
   101 FORMAT(5X,'Time  T=',F7.3)
 
-      WRITE (777,102) ,Y
-      WRITE (999,102) ,Y(25)
-	WRITE (891,102) ,Y(1)
-	WRITE (892,102) ,Y(2)
-	WRITE (893,102) ,Y(3)
-	WRITE (894,102) ,Y(4)
-	WRITE (895,102) ,Y(5)
-	WRITE (896,102) ,Y(6)
-	WRITE (897,102) ,Y(7)
-	WRITE (898,102) ,Y(8)
-	WRITE (899,102) ,Y(9)
-      WRITE (900,102) ,Y(10)
-	WRITE (491,102) ,Y(14)
-	WRITE (492,102) ,Y(15)
-	WRITE (493,102) ,Y(16)
-	WRITE (494,102) ,Y(17)
-	WRITE (495,102) ,Y(18)
-	WRITE (496,102) ,Y(19)
-	WRITE (497,102) ,Y(20)
-	WRITE (498,102) ,Y(21)
-	WRITE (499,102) ,Y(22)
+!      WRITE (777,102) ,Y
+!      WRITE (999,102) ,Y(25)
+!	WRITE (891,102) ,Y(1)
+!	WRITE (892,102) ,Y(2)
+!	WRITE (893,102) ,Y(3)
+!	WRITE (894,102) ,Y(4)
+!	WRITE (895,102) ,Y(5)
+!	WRITE (896,102) ,Y(6)
+!	WRITE (897,102) ,Y(7)
+!	WRITE (898,102) ,Y(8)
+!	WRITE (899,102) ,Y(9)
+!      WRITE (900,102) ,Y(10)
+!	WRITE (491,102) ,Y(14)
+!	WRITE (492,102) ,Y(15)
+!	WRITE (493,102) ,Y(16)
+!	WRITE (494,102) ,Y(17)
+!	WRITE (495,102) ,Y(18)
+!	WRITE (496,102) ,Y(19)
+!	WRITE (497,102) ,Y(20)
+!	WRITE (498,102) ,Y(21)
+!	WRITE (499,102) ,Y(22)
 	Print 102,Y
-  102 FORMAT(3X,10F9.4)
-      WRITE (777,103),RS
-	WRITE (811,102),RS(4)
-      WRITE (812,102),RS(5)
-	WRITE (813,102),RS(6)
+  102 FORMAT(3X,13F9.4)
+	do 432 i=1,10
+  432 y10(i)=Y(i)
+	
+	write (891,1891) TT,Y10
+ 1891 format (11f12.5)
+
+      tf=akk*Per1
+
+
+      do 332 i=1,10
+	if (TT.le.TF) vr=YSIL*TT
+	if (TT.gt.TF) vr=YSIL*TF
+  332 continue
+
+
+      write (892,1892) TT,Y(11),Y(12),Y(13),Y(24),Y(25),Y(26),VR
+ 1892 format (8f12.5)
+      
+      write (893,1893) TT,RS
+ 1893 format (7f12.5)
+
+      F0=FG(0.d0)
+      F1=FGP(0.d0)
+      F2=FGPp(0.d0)
+	G1=F0**2
+      G2=F0/F1/pi
+      G3=(F1**2+F0*F2)/3./pi/F0/F0
+      S1=0.
+      S2=0.
+      DO 1023 I=1,N2
+ 1023 S1=S1+Y(I)**2*ANN(I)
+      DO 1229 I=1,N3
+      DO 1229 J=1,N3
+      DO 1229 K=1,N3
+ 1229 S2=S2+Y(I)*Y(J)*Y(K)*GAV(I,J,K)
+      S0=-(S1*G2+S2*G3)/PI/G1
+      aksi=y(2)+Y(3)+y(5)+y(6)+y(8)+y(10)+S0
+      
+	
+	print 802,tt,aksi,S0
+	WRITE (299,802) , tt, aksi, s0
+  802 format(3f12.5)
+
+!      WRITE (777,103),RS
+!	WRITE (811,102),RS(4)
+!      WRITE (812,102),RS(5)
+!	WRITE (813,102),RS(6)
   103 FORMAT(13X,6F10.4)
       IF(N5.EQ.1) CALL VIDGEO(T,Y,N9,N1)
 
@@ -533,6 +579,7 @@ C      PSZ(I)=0.3
      4GAY3(10,10,10),GAZ3(10,10,10),DEX4(10,10,10,10),DEY4(10,10,10,10),
      5DEZ4(10,10,10,10),DES(3,3,3,10),ALS(10),BES(10,10),DE4(3,3,3,10),
      6BEX3(10,10),BEY3(10,10),BEZ3(10,10)
+      DOUBLE PRECISION FG
       G1=PI*F0**2
       G2=PI*F0*F1
       G3=PI/3.*(F1**2+F0*F2)
@@ -580,14 +627,14 @@ C      PSZ(I)=0.3
       DO 3 I=1,24 
       SK(19,I)=H
     3 SK(20,I)=15*(I-1)
-      PRINT 4,SK
-	write (777,4) SK
-      write (500,5),T
-      write (500,4),SK
+!      PRINT 4,SK
+!	write (777,4) SK
+!      write (500,5),T
+!      write (500,4),SK
       
-	write (122,15),T
-      write (122,5),S0
-	write (122,5),G3
+!	write (122,15),T
+!      write (122,5),S0
+!	write (122,5),G3
 	
 	DO 201 I=1,9
       J=2*I-1
@@ -610,8 +657,8 @@ C      PSZ(I)=0.3
   201 SSK(M,L)=SS
 !  201 SSK(M,L)=H*SS/F0
       
-      PRINT 4,SSK
-      write (2500,5),T
+!      PRINT 4,SSK
+!      write (2500,5),T
 !      write (2500,4),SSK
 
 !     0	      
@@ -620,10 +667,10 @@ C      PSZ(I)=0.3
 	K=2*L-1
 	M=K+1
       
-	IF(K.EQ.1)  write (2700,5) SSK(M,I)
-	IF(K.EQ.9)  write (2707,5) SSK(M,I)
-  204   write (2022,5) SSK(M,I)
-     
+!	IF(K.EQ.1)  write (2700,5) SSK(M,I)
+!	IF(K.EQ.9)  write (2707,5) SSK(M,I)
+!  204   write (2022,5) SSK(M,I)
+  204 continue
 
     
 !     90	      
@@ -631,47 +678,51 @@ C      PSZ(I)=0.3
       DO 14 L=1,9
 	K=2*L-1
 	M=K+1
-      write (111,5) SK(K,I)
+!      write (111,5) SK(K,I)
 
-   14   write (222,5) SK(M,I)
-      write (111,15),T
-	write (222,15),T
+!   14   write (222,5) SK(M,I)
+   14 continue
+!      write (111,15),T
+!	write (222,15),T
 
 !     270
       I=7
       DO 16 L=1,9
 	K=2*L-1
 	M=K+1
-      write (711,5) -SK(K,I)
-   16   write (722,5) SK(M,I)
-      write (711,15),T
-	write (722,15),T
+!      write (711,5) -SK(K,I)
+!   16   write (722,5) SK(M,I)
+   16 continue
+!      write (711,15),T
+!	write (722,15),T
 
 !     0	      
 	 I=1      
       DO 24 L=1,9
 	K=2*L-1
 	M=K+1
-      write (1011,5) SK(K,I)
-	IF(K.EQ.1)  write (700,5) SK(M,I)
+!      write (1011,5) SK(K,I)
+!	IF(K.EQ.1)  write (700,5) SK(M,I)
 
-	IF(K.EQ.9)  write (707,5) SK(M,I)
-   24   write (1022,5) SK(M,I)
-      write (1011,15),T
-	write (1022,15),T
-      write (1077,5),T
+!	IF(K.EQ.9)  write (707,5) SK(M,I)
+!   24   write (1022,5) SK(M,I)
+   24 continue
+!      write (1011,15),T
+!	write (1022,15),T
+!      write (1077,5),T
 !     180
       I=5
       DO 26 L=1,9
 	K=2*L-1
 	M=K+1
-      write (1071,5) -SK(K,I)
-   26   write (1072,5) SK(M,I)
-      write (1071,15),T
-	write (1072,15),T
-    5 FORMAT(3X,F10.4)
-    4 FORMAT(3X,20F10.4,'  Displacement KSI   Asimut')
-   15 FORMAT(3X,F10.4,'=T')
+!      write (1071,5) -SK(K,I)
+!   26   write (1072,5) SK(M,I)
+   26 continue
+!      write (1071,15),T
+!	write (1072,15),T
+!    5 FORMAT(3X,F10.4)
+!    4 FORMAT(3X,20F10.4,'  Displacement KSI   Asimut')
+!   15 FORMAT(3X,F10.4,'=T')
       RETURN
       END
 
@@ -834,40 +885,40 @@ C    CALCULATION OF FORMS IN NONCYLINDRIC TANK
       COMMON/EP/A(22,22),B(22,22),C(22),D(22,22),F(22,22),
      1E(22),Q(22),P(22,22),QQ(22,22),QR(22,22),QA(22,22),QB(22,22),
      2X(22,22),Y(22,22),DL(14,12)
-	open(777,file='res.xls')
+!	open(777,file='res.xls')
 	open(888,file='resm.xls')
-      open(889,file='prob.xls')
-      open(999,file='vel.xls')
-	 open(890,file='time.xls')
-	 open(891,file='a1.xls')
-	open(812,file='ry.xls')
-	open(811,file='rx.xls')
-	open(813,file='rz.xls')
-	open(500,file='psi.xls')
-	open(555,file='obr.xls')
-	open(556,file='yrad.xls')
-	open(491,file='v1.xls')
-	open(492,file='v2.xls')
-	open(493,file='v3.xls')
-	open(494,file='v4.xls')
-	open(495,file='v5.xls')
-	open(496,file='v6.xls')
-	open(497,file='v7.xls')
-	open(498,file='v8.xls')
-	open(499,file='v9.xls')
-	open(333,file='en.xls')
-      open(111,file='rf0right.xls')
-	open(222,file='psf0right.xls')
-	open(711,file='rf0left.xls')
-	open(722,file='psf0left.xls')
-	open(700,file='psf0.xls')
-	open(707,file='psfw.xls')
-	open(1077,file='time_psf.xls')
+!      open(889,file='prob.xls')
+!      open(999,file='vel.xls')
+!	 open(890,file='time.xls')
+!	 open(891,file='a1.xls')
+!	open(812,file='ry.xls')
+!	open(811,file='rx.xls')
+!	open(813,file='rz.xls')
+!	open(500,file='psi.xls')
+!	open(555,file='obr.xls')
+!	open(556,file='yrad.xls')
+!	open(491,file='v1.xls')
+!	open(492,file='v2.xls')
+!	open(493,file='v3.xls')
+!	open(494,file='v4.xls')
+!	open(495,file='v5.xls')
+!	open(496,file='v6.xls')
+!	open(497,file='v7.xls')
+!	open(498,file='v8.xls')
+!	open(499,file='v9.xls')
+!	open(333,file='en.xls')
+!      open(111,file='rf0right.xls')
+!	open(222,file='psf0right.xls')
+!	open(711,file='rf0left.xls')
+!	open(722,file='psf0left.xls')
+!	open(700,file='psf0.xls')
+!	open(707,file='psfw.xls')
+!	open(1077,file='time_psf.xls')
 
-	open(1011,file='rf0right-180.xls')
-	open(1022,file='psf0right-180.xls')
-      open(1071,file='rf0left-180.xls')
-	open(1072,file='psf0left-180.xls')
+!	open(1011,file='rf0right-180.xls')
+!	open(1022,file='psf0right-180.xls')
+!      open(1071,file='rf0left-180.xls')
+!	open(1072,file='psf0left-180.xls')
       H=H2
 !	print 51,H
 !   51 format('na vkhode h=', F12.5)
@@ -917,7 +968,7 @@ C        Initial depth (real one increader for PSZ(i) for every mode
       H=HM
       HH=H+HE
       PRINT 202,M,M,M,M,M,M,M
-	WRITE (777,202), M,M,M,M,M
+!	WRITE (777,202), M,M,M,M,M
   202 FORMAT(10X,' M=', 7I4)
       WRITE (888,202), M
       
@@ -963,9 +1014,9 @@ C       for the initial height
   120 CONTINUE
       MU=MU+1
       IF(IPR.EQ.0) GO TO 805
-      PRINT 10
-	WRITE(777,10)
-   10 FORMAT(4X,'Classic variant')
+!      PRINT 10
+!	WRITE(777,10)
+!   10 FORMAT(4X,'Classic variant')
       DO 20 I=1,N
       IF(C(I)-1.D-4) 24,24,25
    25 AT=1.D0/C(I)
@@ -984,14 +1035,14 @@ C       for the initial height
       PRINT 12,E
    12 FORMAT(3X,10F12.6)
        
-	WRITE (777,11)
-      WRITE (777,12),E
+!	WRITE (777,11)
+!      WRITE (777,12),E
 
       PRINT 13
-	WRITE (777,13)
+!	WRITE (777,13)
    13 FORMAT(3X,'Eigen frequencies')
       PRINT 12,C
-	WRITE (777,12),C 
+!	WRITE (777,12),C 
   805 CONTINUE
       J=96
       DO 61 I=1,3
@@ -1031,9 +1082,9 @@ C       for the initial height
       PRINT 12,PN
    
 
-	WRITE(888,40)
+!	WRITE(888,40)
       PRINT 40
-	WRITE(777,40)
+!	WRITE(777,40)
    40 FORMAT(/4X,'modified variant')
   806 CONTINUE
       DO 303 I=1,3
@@ -1047,20 +1098,20 @@ C       for the initial height
   301 CONTINUE
       ALAM=XX/YY
       PRINT 302,ALAM
-	write (777,302), ALAM
+!	write (777,302), ALAM
 
  1655 format(10X,'ENERGY',F10.6)
       
       ENERGY=XX+YY
 
-      write (777,1655), ENERGY
+!      write (777,1655), ENERGY
 	IF(Z1.EQ.0) GO TO 306
 	IF(mu.EQ.1) GO TO 306
-  	WRITE (889,202), M
-      WRITE (889,616), mu
-      write (889,655),pn(96,I),pn(77,I)
-  655 format('Ёпюры h(96)= y(77)= ', 2F12.8)
-      write (889,302), ALAM
+!  	WRITE (889,202), M
+!      WRITE (889,616), mu
+!      write (889,655),pn(96,I),pn(77,I)
+!  655 format('Ёпюры h(96)= y(77)= ', 2F12.8)
+!      write (889,302), ALAM
   616 FORMAT(10X,' mu=', 7I4)
   306    CONTINUE
  	IF(I.NE.3) GO TO 307 
@@ -1068,7 +1119,7 @@ C       for the initial height
 	IF(mu.EQ.2) GO TO 307 
   307   CONTINUE
 
-      write (888,302), ALAM
+!      write (888,302), ALAM
 !	WRITE (889,616), mu
 	
  1212 FORMAT(3X,f12.4)
@@ -1081,8 +1132,8 @@ C       for the initial height
       IF(I.EQ.2.AND.NF2.NE.0) CHA(NF2)=ALAM
   303 CONTINUE
       do 660 k=1,106
-	write(555,1212),F0(k)
-	write(556,1212),yrad(k)
+!	write(555,1212),F0(k)
+!	write(556,1212),yrad(k)
   660 continue	    
 !	write(889,12),pn(96,1)
 	IF(MU.EQ.2) GO TO 200
@@ -3589,8 +3640,8 @@ C     DIFFERENTIAL R**3 FROM GARMONIC POLINOMS
  7229 CONTINUE
       EE=EE+S
 	RES=EE
-		WRITE (333,265),RES
-      IF(TT.EQ.0.) PRINT 265,RES
-  265 FORMAT(3X,10F15.8)
+!		WRITE (333,265),RES
+!      IF(TT.EQ.0.) PRINT 265,RES
+!  265 FORMAT(3X,10F15.8)
       RETURN
       END
