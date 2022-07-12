@@ -1,0 +1,1 @@
+gfortran src/giper_1.f -o bin/giper_1.exe

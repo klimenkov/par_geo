@@ -1,26 +1,45 @@
 C     MAIN PROGRAM FOR GEO VARIANT - 1
       EXTERNAL VRGEO,ARG
+	double precision ag,bg
+	common/GIPER/ag,bg
+	common/ellips/ae,be
       COMMON/PROG/ Y(26),YR(26),YY(26),Z(26),RR(26)
       COMMON/RAZM/ N1,N2,N3,N4
       COMMON/FIZP/ RMS,ROG,G,SR,G0,RKG
       COMMON/RS/ RS(6)
+      common/chastota/omeg_sob
       COMMON/MUP/ MU(10)
       COMMON/ RIS/ TPV(7,8),RPV(6,9)
       COMMON/CHAS/ CHA(6)
-      DOUBLE PRECISION W0,W1,TPS,H,R,D,D1,FG,CHA
-     1,WW,GG,E0,E1,E2,E3,EE  ,ARG,GI,ENERGY
+      DOUBLE PRECISION W0,W1,TPS,H,R,D,D1,FG,CHA,Z1,D2,
+     1WW,GG,E0,E1,E2,E3,EE,ARG,GI,ENERGY,Hreal,R0
       COMMON/UM/ WW(96),GG(106),E0(106),E1(106),E2(106),E3(106),EE(106)
      1,yrad(106)
       COMMON/ MEN/ MM(10),NN(10),MN(6)
-      COMMON/GEO/ H,R,D,D1
-	DIMENSION QAA(6,6,6),QBB(3,3,3,3), y10(10)
+      COMMON/GEO/ H,R,D,D1,D2,Z1,Hreal,R0
+	DIMENSION QAA(6,6,6),QBB(3,3,3,3),y10(10)
       COMMON/BC/ GAC(6,6,10),DEC(3,3,3,10),HHC(3,3,3,3,10),
      1VV1(10,10),VV2(10,10,10),VV3(10,10,10,10),UU1(3,10),UU2(3,10,10),
      2UU3(3,10,10,10),UU4(3,10,10,10,10),WW1(10),WW2(10),WW3(6,6,10),
      3WW4(3,3,3,10),VZ2(6,6,10),VZ3(3,3,3,10),UZ2(3,10,10),
-     4UZ3(3,6,6,10),UZ4(3,3,3,3,10),PN(110,6)
+     4UZ3(3,6,6,10),UZ4(3,3,3,3,10),PN(110,6),PN1(110,6)
+	COMMON /EY/ EPSY,C,EPSYT
+      COMMON/EP/GAV(10,10,10),ANN(10),GB0(10,6,10),GB1(10,3,10),
+     1DB1(10,3,3,10),HB(3,3,3,3,10),BB1(10,10),BF2(10,10),BF3(3),
+     2GF3(10,10,10),DF4(10,10,10,10),ALX1(10),ALY1(10),ALZ1(10),
+     3ALX2(10),ALY2(10),BEX2(10,10),BEY2(10,10),GAX3(10,10,10),
+     4GAY3(10,10,10),GAZ3(10,10,10),DEX4(10,10,10,10),DEY4(10,10,10,10),
+     5DEZ4(10,10,10,10),DES(3,3,3,10),ALS(10),BES(10,10),DE4(3,3,3,10),
+     6BEX3(10,10),BEY3(10,10),BEZ3(10,10)
       DOUBLE PRECISION FS, FGP, FGPP
-      COMMON/EP/GAV(10,10,10), ANN(10)                                                          
+	common/period/Per1,akk,YSIL
+  !    hyperboloid
+      ag=1.
+	bg=1. 
+      ae = 1.
+	  be = 1.
+      C=5.
+!	C=0.
       CALL WGL
 	
       N3=3
@@ -31,17 +50,17 @@ C   N2 is number of modes studied unti 2-nd order
 C Total number of modes
       N4=N1+3
       PI=3.1415926
-	
       N5=1
 C Counter for Runge-Kutta step
       N9=2*N4
       N10=10
-      N10=25
+      N10=5
 C   Period of printing wave position
-      H=0.5D0
+      H=1.D0
+	R0=0.
 !      H=2.D0
 C   Depth of liquid
-!      H=0.3D0 
+!      H=0.3D0
       R=1.D0
 !	R=2.D0
       ROG=1.E+3
@@ -49,15 +68,12 @@ C   Depth of liquid
       RKG=1.
       G=G0*RKG
       T=0.
-      HH=0.01
-	     
-      TK=10.0
+      HH=0.01 
+      TK=50.
       MU(3)=0
-      MU(2)=0
       MU(1)=1
-!      MU(1)=1
-!      MU(2)=1
-!      MU(3)=1
+      MU(2)=0
+ 
 C If MU(I)=0, motion in this direction is restricted
       DO 1 I=1,N9
       YY(I)=0.
@@ -68,37 +84,16 @@ C If MU(I)=0, motion in this direction is restricted
 C NF is number of coordinate functions entrained for solving the linear problem
       CALL VUGEO(H,R)
 C   Calculation of integrals in angular direction
-	open(777,file='res.xls')
-!	open(551,file='coef.xls')
+	open(777,file='res.txt')
+!	open(551,file='coef.txt')
 !	open(888,file='resm.xls')
-!	open(999,file='vel.xls')
-!	open(890,file='time.xls')
-      open(891,file='ampli.txt')
+
+
+
+	open(891,file='ampli.txt')
 	open(892,file='perem.txt')
 	open(893,file='sily.txt')
-!	open(894,file='a4.xls')
-!	open(895,file='a5.xls')
-!	open(896,file='a6.xls')
-!	open(897,file='a7.xls')
-!	open(898,file='a8.xls')
-!	open(899,file='a9.xls')
-!	open(900,file='a10.xls')
-!	open(491,file='v1.xls')
-!	open(492,file='v2.xls')
-!	open(493,file='v3.xls')
-!	open(494,file='v4.xls')
-!	open(495,file='v5.xls')
-!	open(496,file='v6.xls')
-!	open(497,file='v7.xls')
-!	open(498,file='v8.xls')
-!	open(499,file='v9.xls')
-!      open(889,file='prob.xls')
-!	open(812,file='ry.xls')
-!	open(811,file='rx.xls')
-!	open(813,file='rz.xls')
-!	open(500,file='psi.xls')
-!	open(555,file='obr.xls')
-!	open(556,file='yrad.xls')
+
 ! используетс€ столбцы ось х - права€ ветка параболоида obr.xls
 ! ось у yrad.xls, отсортированный по возрастанию
 !	open(333,file='en.xls')
@@ -106,17 +101,13 @@ C   Calculation of integrals in angular direction
 !     psf0right - свободна€ поверхность 
 !	open(111,file='rf0right.xls')
 !	open(222,file='psf0right.xls')
-!      open(711,file='rf0left.xls')
+!     open(711,file='rf0left.xls')
 !	open(722,file='psf0left.xls')
 !	open(700,file='psf0.xls')
 !	open(707,file='psfw.xls')
 !      open(1077,file='time_psf.xls')
       open(299,file='ksi.txt')
 
-!      open(2500,file='POINT-psi-time.xls')
-!      open(2700,file='POINT-psf0-centre.xls')
-!      open(2022,file='POINT-psf0right-180.xls')
-!	open(2707,file='POINT-psf0t-wall.xls')
 
 !	open(1011,file='rf0right-180.xls')
 !	open(1022,file='psf0right-180.xls')
@@ -152,7 +143,7 @@ C   Calculation of integrals in angular direction
       DO 11 I=1,6
    11 RPV(I,J)=FS(0,1,W0,0.D0,I,NF)
 
-!      WRITE (777,402)
+!      WRITE (777,402) 
 !  402 FORMAT(13X,' ARRAY RPV',/)
       
 !  202 FORMAT(13X,' ARRAY ',/)
@@ -211,7 +202,7 @@ C   Calculation of integrals in angular direction
 !	WRITE (551,1134),VV2(4,1,2)
 !	WRITE (551,1135),VV2(5,2,2)
 !	WRITE (551,1136),VV2(5,1,1)
-
+!
 ! 1137 FORMAT(13X,' Delta(1,1,1,1)= (D1 = 0,3920 ) = ',F12.4)
 !      WRITE (551,1137),VV3(1,1,1,1)
 ! 1138 FORMAT(13X,' Delta(1,1,2,2)= (D2 =-0,2416 ) = ',F12.4)
@@ -224,12 +215,12 @@ C   Calculation of integrals in angular direction
 !      WRITE (551,1141),VV3(1,2,1,2)     
 ! 1142    FORMAT(13X,' Delta(1,2,2,1)= (D2 = ) = ',F12.4)
 !      WRITE (551,1142),VV3(1,2,2,1)     
-! 1143    FORMAT(13X,' Delta(2,1,1,2)= (D2 = ) = ',F12.4)
+! 1143    FORMAT(13X,' Delta(2,1,1,2)= (D2 = xsila) = ',F12.4)
 !      WRITE (551,1143),VV3(2,1,1,2)     
 ! 1144    FORMAT(13X,' Delta(2,2,1,2)= (D2 = ) = ',F12.4)
 !      WRITE (551,1144),VV3(2,1,2,1)     
-
-            
+!
+!            
 ! 1202 FORMAT(13X,'/ ARRAY vv2',/)    
 ! 1203 FORMAT(13X,'/ ARRAY vv3',/)  
   
@@ -275,19 +266,35 @@ C   Calculation of integrals in angular direction
       R1=FG(0.D0)
       DO 2 I=1,N9
     2 Y(I)=0.
-!      Y(2)=0.02 *R1
-      Y(1)=0.
+ !     Y(2)=0.15 *R1
+!      Y(3)=0.05*R1
+
+
+
+
 	PRINT 410
 !	WRITE (777,410)
   410 FORMAT (2x, 'doshla do runge-kutta')
   	PRINT 411, Y
 !	WRITE (777,411), Y
   411 FORMAT (2x, 10F10.7)
+
+
+      omeg_par=sqrt(g*WW2(2)/VV1(2,2))
+	omeg_sob=omeg_par/sqrt(1.-UU1(1,2)**2*rog/(RMG+RMR)/VV1(2,2))
+	Per1=2.*PI/omeg_sob
+	a12=(rog/(RMR+RMG))*UU1(1,2)
+!      a12=0.
+	print *, rog,RMR,RMG,VV1(2,2),WW2(2),UU1(1,2)
+      print *, omeg_par,omeg_sob,Per1,a12
+	pause
+
+
    13 CALL VRRKKS(T,Y,HH,N9,VRGEO,YY,RR,Z)
-            CALL VENERGY(T,Y,N9,N1)
+         CALL VENERGY(T,Y,N9,N1)
       TT=N5*HH
 
-!      PRINT 420, Y(2),Y(3)
+ !     PRINT 420, Y(2),Y(3)
 !	WRITE (777,420), Y(2),Y(3)
   420 FORMAT (2x, f14.5, 3x, F14.7)
 !	WRITE (777,101),TT
@@ -306,7 +313,10 @@ C   Calculation of integrals in angular direction
 !	WRITE (897,102) ,Y(7)
 !	WRITE (898,102) ,Y(8)
 !	WRITE (899,102) ,Y(9)
-!      WRITE (900,102) ,Y(10)
+!     WRITE (900,102) ,Y(10)
+!	WRITE (901,802) ,tt, Y(11),tt
+!	WRITE (902,102) ,Y(12)
+!	WRITE (903,102) ,Y(13)
 !	WRITE (491,102) ,Y(14)
 !	WRITE (492,102) ,Y(15)
 !	WRITE (493,102) ,Y(16)
@@ -317,7 +327,8 @@ C   Calculation of integrals in angular direction
 !	WRITE (498,102) ,Y(21)
 !	WRITE (499,102) ,Y(22)
 	Print 102,Y
-  102 FORMAT(3X,13F9.4)
+  102 FORMAT(3X,13F9.4)  
+      
 	do 432 i=1,10
   432 y10(i)=Y(i)
 	
@@ -343,8 +354,8 @@ C   Calculation of integrals in angular direction
       F1=FGP(0.d0)
       F2=FGPp(0.d0)
 	G1=F0**2
-      G2=F0/F1/pi
-      G3=(F1**2+F0*F2)/3./pi/F0/F0
+      G2=F1*F0/pi   !!!
+      G3=(F1**2+F0*F2)/3./pi   !!!
       S1=0.
       S2=0.
       DO 1023 I=1,N2
@@ -360,19 +371,17 @@ C   Calculation of integrals in angular direction
 	print 802,tt,aksi,S0
 	WRITE (299,802) , tt, aksi, s0
   802 format(3f12.5)
-
 !      WRITE (777,103),RS
 !	WRITE (811,102),RS(4)
 !      WRITE (812,102),RS(5)
 !	WRITE (813,102),RS(6)
   103 FORMAT(13X,6F10.4)
       IF(N5.EQ.1) CALL VIDGEO(T,Y,N9,N1)
-
       N8=MOD(N5,N10)
       IF(N8.EQ.0) CALL VIDGEO(T,Y,N9,N1)
       IF(TK-T) 4,4,5
     5 T=TT
-      
+!      CALL VENERGY(T,Y,N9,N1)
       N5=N5+1
       GO TO 13
     4 WRITE (777,105)
@@ -418,37 +427,48 @@ C   Calculation of integrals in angular direction
       END
 
       FUNCTION YSILA(T)
+	COMMON /EY/ EPSY,C,EPSYT
+	S1=0.
+      S2=-C*EPSY
+	cc=c/5.
+      s3=0.
+	if(EPSY.ge.0.0) s3=-cc*EPSY
 !      Y=5000.0
-      Y=5.
-      Y=1.
+!      Y=5.
+ !     Y=1.
 !      Y=0.
-!      Y=3.125
-      TAU=0.35
-!   
-!      TAU=0.16
-      IF( T.GE.TAU) Y=0.
-      am=1.
-	omega=3.6
-	Y=am*cos(omega*T)
-	Y=0.
-      YSILA=Y
+       Y=0.9
+       TAU=0.5
+      S1=Y 
+      IF( T.GE.TAU) S1=0.
+ !    YSILA=Y
+      YSILA=0.
       RETURN
       END
 
       FUNCTION XSILA(T)
-      Y= 1.2
-	Y=0
-	am=1.1
-	omega=3.6
-	Y=am*cos(omega*T)
-      XSILA=Y
+	common/period/Per1,akk,YSIL
+	common/chastota/omeg_sob
+	akk=0.4
+      tf=akk*Per1
+	YSIL=0.7
+	Y=YSIL
+	if(t.ge.tf) Y=0.
+!      vibration 
+      om=omeg_sob*0.5
+	A=0.5
+      y=A*sin(om*T)
+
+	XSILA=Y
       RETURN
       END
 
       FUNCTION ZSILA(T)
       COMMON/FIZP/ RMS,ROG,G,SR,G0,RKG
       Y=0.
-      Y=G
+      Y=G+0.7*sin(6.24*T)
+	Y=G+0.7*sin(4.*T)
+	Y=0.
       ZSILA=Y
       RETURN
       END
@@ -565,11 +585,12 @@ C      PSZ(I)=0.3
       END
       
 	SUBROUTINE VIDGEO(T,Y,N9,N1)
-      DIMENSION Y(N9),SK(20,24),SSK(20,24)
+      DIMENSION Y(N9),SK(20,8)
       COMMON/ MEN/ MM(10),NN(10)
-      COMMON/ RIS/ TPV(7,24),RPV(6,9)
+      COMMON/ RIS/ TPV(7,8),RPV(6,9)
       COMMON/FGEO/ F0,F1,F2,F3,PI
       DOUBLE PRECISION F0,F1,F2,F3,PI,H,R,D,D1,S
+	  DOUBLE PRECISION FS, FGP, FGPP, FG
       COMMON/GEO/ H,R,D,D1
       COMMON/RAZM/ N7,N2,N3,N4
       COMMON/EP/GAV(10,10,10),ANN(10),GB0(10,6,10),GB1(10,3,10),
@@ -579,17 +600,11 @@ C      PSZ(I)=0.3
      4GAY3(10,10,10),GAZ3(10,10,10),DEX4(10,10,10,10),DEY4(10,10,10,10),
      5DEZ4(10,10,10,10),DES(3,3,3,10),ALS(10),BES(10,10),DE4(3,3,3,10),
      6BEX3(10,10),BEY3(10,10),BEZ3(10,10)
-      DOUBLE PRECISION FG
       G1=PI*F0**2
       G2=PI*F0*F1
       G3=PI/3.*(F1**2+F0*F2)
       S1=0.
       S2=0.
-	
-      GG2=F0*F1
-      GG3=F0*F2
-      SS=0.
-      SS2=0.
       DO 10 I=1,N2
    10 S1=S1+Y(I)**2*ANN(I)
       DO 11 I=1,N3
@@ -597,91 +612,45 @@ C      PSZ(I)=0.3
       DO 11 K=1,N3
    11 S2=S2+Y(I)*Y(J)*Y(K)*GAV(I,J,K)
       S0=-(S1*G2+S2*G3)/PI/G1
-	
-	
-      DO 111 I=1,N2
-  111 SS2=SS2+Y(I)*Y(I+N1)*ANN(I)
-	 
-	 SS0=-2*(SS2*G2)/PI/G1
 	      
       DO 1 I=1,9
       J=2*I-1
       M=J+1
-      DO 1 L=1,24    
+      DO 1 L=1,8    
        S=S0
       DO 2 K=1,N1
       KI=NN(K)
       KJ=MM(K)
     2 S=S+Y(K)*TPV(KJ,L)*RPV(KI,I)
-
-!       U=0.125*(I-1)*FG(S*H/F0)
-       U=0.125*(I-1)*FG(S)
-!	  IF(I.EQ.1) U=0.01*FG(S*H/F0)
-	  IF(I.EQ.1) U=0.01*FG(S)
+!      U=0.125*(I-1)*FG(S*H)/F0
+       U=0.125*(I-1)*FG(S*H/F0)
+	  IF(I.EQ.1) U=0.01*FG(S*H/F0)
 ! ALFA=1; U=r	; r=ALFA*FG(z) ; z=H*BETA
 !     S=BETA; SK(J,L)=r; SK(M,L)=z
       SK(J,L)=U
-
-!    1 SK(M,L)=H*S/F0
-    1 SK(M,L)=S
-      DO 3 I=1,24 
+!    1 SK(M,L)=S/F0
+    1 SK(M,L)=H*S/F0
+      DO 3 I=1,8 
       SK(19,I)=H
-    3 SK(20,I)=15*(I-1)
+    3 SK(20,I)=45*(I-1)
 !      PRINT 4,SK
 !	write (777,4) SK
 !      write (500,5),T
 !      write (500,4),SK
-      
+!      
 !	write (122,15),T
 !      write (122,5),S0
 !	write (122,5),G3
-	
-	DO 201 I=1,9
-      J=2*I-1
-      M=J+1
-      DO 201 L=1,24    
-       SS=SS0
-      DO 200 K=1,N1
-      KI=NN(K)
-      KJ=MM(K)
-  200 SS=SS+Y(K+N1)*TPV(KJ,L)*RPV(KI,I)
-  
-!      U=0.125*(I-1)*FG(S*H/F0)
-      U=0.125*(I-1)*FG(S)
-!	  IF(I.EQ.1) U=0.01*FG(S*H/F0)
-	IF(I.EQ.1) U=0.01*FG(S)
-! ALFA=1; U=r	; r=ALFA*FG(z) ; z=H*BETA
-!     S=BETA; SK(J,L)=r; SK(M,L)=z
-      SSK(J,L)=U
-      
-  201 SSK(M,L)=SS
-!  201 SSK(M,L)=H*SS/F0
-      
-!      PRINT 4,SSK
-!      write (2500,5),T
-!      write (2500,4),SSK
 
-!     0	      
-	 I=1      
-      DO 204 L=1,9
-	K=2*L-1
-	M=K+1
-      
-!	IF(K.EQ.1)  write (2700,5) SSK(M,I)
-!	IF(K.EQ.9)  write (2707,5) SSK(M,I)
-!  204   write (2022,5) SSK(M,I)
-  204 continue
-
-    
 !     90	      
 	 I=3      
       DO 14 L=1,9
 	K=2*L-1
 	M=K+1
 !      write (111,5) SK(K,I)
-
-!   14   write (222,5) SK(M,I)
+!      write (222,5) SK(M,I)
    14 continue
+      
 !      write (111,15),T
 !	write (222,15),T
 
@@ -691,7 +660,7 @@ C      PSZ(I)=0.3
 	K=2*L-1
 	M=K+1
 !      write (711,5) -SK(K,I)
-!   16   write (722,5) SK(M,I)
+!      write (722,5) SK(M,I)
    16 continue
 !      write (711,15),T
 !	write (722,15),T
@@ -703,9 +672,8 @@ C      PSZ(I)=0.3
 	M=K+1
 !      write (1011,5) SK(K,I)
 !	IF(K.EQ.1)  write (700,5) SK(M,I)
-
 !	IF(K.EQ.9)  write (707,5) SK(M,I)
-!   24   write (1022,5) SK(M,I)
+!      write (1022,5) SK(M,I)
    24 continue
 !      write (1011,15),T
 !	write (1022,15),T
@@ -715,8 +683,8 @@ C      PSZ(I)=0.3
       DO 26 L=1,9
 	K=2*L-1
 	M=K+1
-!      write (1071,5) -SK(K,I)
-!   26   write (1072,5) SK(M,I)
+ !     write (1071,5) -SK(K,I)
+!      write (1072,5) SK(M,I)
    26 continue
 !      write (1071,15),T
 !	write (1072,15),T
@@ -726,8 +694,7 @@ C      PSZ(I)=0.3
       RETURN
       END
 
-
-      
+      !     «адаем уравнение образующей
 	DOUBLE PRECISION FUNCTION FG (X)
       DOUBLE PRECISION X,H,R,D,D1,F0,D2,Z1,Hreal,R0,ae,be
       COMMON/GEO/ H,R,D,D1,D2,Z1,Hreal,R0
@@ -877,7 +844,7 @@ C    CALCULATION OF FORMS IN NONCYLINDRIC TANK
       IMPLICIT REAL*8 (A-H,O-Z)
       COMMON/CHAS/ CHA(6)
       COMMON/FORMA/ PSF(25,6),PS0(25),PSZ(6),AF0,AF1
-      DIMENSION PN(110,6),AN(3),EM(110,3)
+      DIMENSION PN(110,6),PN1(110,6),AN(3),EM(110,3)
       COMMON/UM/ WW(96),GG(106),F0(106),F1(106),F2(106),F3(106),FE(106)
      1,yrad(106)
       COMMON/GEO/ H,W,V,D1
@@ -897,6 +864,10 @@ C    CALCULATION OF FORMS IN NONCYLINDRIC TANK
 !	open(500,file='psi.xls')
 !	open(555,file='obr.xls')
 !	open(556,file='yrad.xls')
+!
+!      open(901,file='y1.xls')
+!      open(902,file='y2.xls')
+!      open(903,file='y3.xls')
 !	open(491,file='v1.xls')
 !	open(492,file='v2.xls')
 !	open(493,file='v3.xls')
@@ -914,7 +885,7 @@ C    CALCULATION OF FORMS IN NONCYLINDRIC TANK
 !	open(700,file='psf0.xls')
 !	open(707,file='psfw.xls')
 !	open(1077,file='time_psf.xls')
-
+!
 !	open(1011,file='rf0right-180.xls')
 !	open(1022,file='psf0right-180.xls')
 !      open(1071,file='rf0left-180.xls')
@@ -1062,11 +1033,14 @@ C       for the initial height
       DO 31 I=1,3
       T=0.D0
       S=0.D0
-      DO 32 K=1,N
+      S1=0.D0
+	DO 32 K=1,N
       T=T+VF(5,K,J)*P(K,I)
       S=S+VF(2,K,J)*P(K,I)
+      S1=S1+VF(4,K,J)*P(K,I)
    32 CONTINUE
       PN(J,I+3)=T/AN(I)
+	PN1(J,I)=S1/AN(I)
    31 PN(J,I)=S /AN(I)
       IF(IPR.EQ.0) GO TO 806
       PRINT 33
@@ -1080,7 +1054,9 @@ C       for the initial height
       DO 88 I=1,3
    88 PN(I+106,J)=AN(J)
       PRINT 12,PN
-   
+      PRINT 337
+  337 FORMAT(2X,'epure of displacements bottom')
+      PRINT 12,PN1
 
 !	WRITE(888,40)
       PRINT 40
@@ -1131,7 +1107,7 @@ C       for the initial height
       IF(I.EQ.1) CHA(NF1)=ALAM
       IF(I.EQ.2.AND.NF2.NE.0) CHA(NF2)=ALAM
   303 CONTINUE
-      do 660 k=1,106
+      do 660 k=1,96
 !	write(555,1212),F0(k)
 !	write(556,1212),yrad(k)
   660 continue	    
@@ -1227,8 +1203,8 @@ C  SOME INTEGRALS FOR LINEAR VALUE PROBLEM IN GEO-VARIANT
       DO 2 I=1,10
 !      A=0.03D0*I*2.D0
       A=0.02D0*I*2.D0
-!      GG(I+96)=A/H+1.D0
-      GG(I+96)=A/H+1.2D0
+      GG(I+96)=A/H+1.D0
+!      GG(I+96)=A/H+1.2D0
     2 CONTINUE
       DO 3 I=1,106
       X=0.5D0*(GG(I)-1.D0)
@@ -2450,6 +2426,7 @@ C
       COMMON/RS/ RS(6)
       COMMON/MUP/ MU(10)
       COMMON/AQ/ L13(13),U13(13),P1(13,13),P2(13,13),P3(13),P4(13)
+	COMMON /EY/ EPSY,C,EPSYT
       IF(XX.NE.0.) GO TO 101
       DO 1 I=1,6
     1 RS(I)=0.
@@ -2462,6 +2439,8 @@ C
       DO 2 J=1,13
       P1(I,J)=DEL(I,J)
     2 P2(I,J)=0.
+    	EPSY=RR(12)
+      EPSYT=RR(25)
       DO 5 I=1,N1
       DO 5 IR=1,N1
     5 P1(IR,I)=VV1(I,IR)
