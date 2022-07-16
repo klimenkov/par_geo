@@ -1,0 +1,14 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "compile (win)",
+            "command": "gfortran",
+            "args": [
+                "-g",
+                "src/giper_1.f",
+                "-o",
+                "bin/giper_1.exe" ]
+        },
+    ]
+}

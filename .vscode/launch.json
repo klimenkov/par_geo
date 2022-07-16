@@ -1,0 +1,17 @@
+{
+    "version": "0.0.1",
+    "configurations": [
+        {
+            "name": "giper_1.exe",
+            "type": "cppdbg",
+            "request": "launch",
+            "targetArchitecture": "x86",
+            "program": "${workspaceRoot}/bin/giper_1.exe",
+            "miDebuggerPath": "gdb.exe",
+            "args": ["0.5", "0.5", "50", "1"],
+            "stopAtEntry": false,
+            "cwd": "${workspaceRoot}",
+            // "preLaunchTask": "compile (win)"
+        },
+    ]
+}
