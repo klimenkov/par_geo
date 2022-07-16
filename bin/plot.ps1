@@ -1,1 +1,1 @@
-python src/plot.py
+python src/plot_file.py
