@@ -37,23 +37,30 @@ C     MAIN PROGRAM FOR GEO VARIANT - 1
 C     Command line arguments (CLA block):
 C        external force XSILA y = CLAA * sin(omeg_sob*CLAOR * T)
 
+C        CLAAE:
+C        CLABE:
 C        CLAOR: omega ratio for XSILA
-C        CLAA:  amplitute for XSILA
+C        CLAA:  amplitude for XSILA
 C        CLATK: time range (0, CLATK)
 C        CLAH:  liquid height in the tank (wrt ae, be in ellipse case)
 
-      REAL CLAOR, CLAA, CLATK, CLAH
-      COMMON/CLA/CLAOR, CLAA, CLATK, CLAH
+      REAL CLAAE, CLABE, CLAOR, CLAA, CLATK, CLAH
+      COMMON /CLA/ CLAAE, CLABE, CLAOR, CLAA, CLATK, CLAH
 
       CHARACTER(LEN=20) :: BUFFER
 
       CALL GETARG(1, BUFFER)
-      READ(BUFFER, *) CLAOR
+      READ(BUFFER, *) CLAAE
       CALL GETARG(2, BUFFER)
-      READ(BUFFER, *) CLAA
+      READ(BUFFER, *) CLABE
+
       CALL GETARG(3, BUFFER)
-      READ(BUFFER, *) CLATK
+      READ(BUFFER, *) CLAOR
       CALL GETARG(4, BUFFER)
+      READ(BUFFER, *) CLAA
+      CALL GETARG(5, BUFFER)
+      READ(BUFFER, *) CLATK
+      CALL GETARG(6, BUFFER)
       READ(BUFFER, *) CLAH
 
   !    hyperboloid
@@ -61,6 +68,10 @@ C        CLAH:  liquid height in the tank (wrt ae, be in ellipse case)
 	bg=1. 
       ae = 1.
 	  be = 1.
+
+      ae = CLAAE
+      be = CLABE
+
       C=5.
 !	C=0.
       CALL WGL
@@ -396,7 +407,7 @@ C   Calculation of integrals in angular direction
 	
 	print 802,tt,aksi,S0
 	WRITE (299,802) , tt, aksi, s0
-  802 format(3f12.5)
+  802 format(3f25.5)
 !      WRITE (777,103),RS
 !	WRITE (811,102),RS(4)
 !      WRITE (812,102),RS(5)
@@ -476,8 +487,8 @@ C   Calculation of integrals in angular direction
 	common/period/Per1,akk,YSIL
 	common/chastota/omeg_sob
 
-      REAL CLAOR, CLAA
-      COMMON/CLA/CLAOR, CLAA
+      REAL CLAAE, CLABE, CLAOR, CLAA, CLATK, CLAH
+      COMMON /CLA/ CLAAE, CLABE, CLAOR, CLAA, CLATK, CLAH
 	akk=0.4
       tf=akk*Per1
 	YSIL=0.7
@@ -729,6 +740,9 @@ C      PSZ(I)=0.3
 	DOUBLE PRECISION FUNCTION FG (X)
       DOUBLE PRECISION X,H,R,D,D1,F0,D2,Z1,Hreal,R0,ae,be
       COMMON/GEO/ H,R,D,D1,D2,Z1,Hreal,R0
+
+      REAL CLAAE, CLABE, CLAOR, CLAA, CLATK, CLAH
+      COMMON /CLA/ CLAAE, CLABE, CLAOR, CLAA, CLATK, CLAH
 !     Y=x**2      
 !	 D2=DSQRT(X+H)
 !	 F0=D2
@@ -746,6 +760,10 @@ C      PSZ(I)=0.3
 !      F0=(1.d0-R0)*(X+H)+R0
       ae=1.d0
 	be=1.d0
+
+      ae = CLAAE
+      be = CLABE
+
       F0=ae/be*sqrt(be**2-(X+H-be)**2)
       FG=F0
       RETURN
@@ -755,6 +773,10 @@ C      PSZ(I)=0.3
       DOUBLE PRECISION FUNCTION FGP(X)
       DOUBLE PRECISION X,H,R,D,D1,F0P,D2,Z1,Hreal,R0,ae,be
       COMMON/GEO/ H,R,D,D1,D2,Z1,Hreal,R0
+
+      REAL CLAAE, CLABE, CLAOR, CLAA, CLATK, CLAH
+      COMMON /CLA/ CLAAE, CLABE, CLAOR, CLAA, CLATK, CLAH
+
 !     Y=x**2 
 !       F0P=0.5/DSQRT(X+H)    
 !     Y=1/2*x**2
@@ -771,6 +793,10 @@ C      PSZ(I)=0.3
 !      F0P=(1.d0-R0)
       ae=1.d0
 	be=1.d0
+
+      ae = CLAAE
+      be = CLABE
+
       F0P=-(ae/be)*(X+H-be)/sqrt(be**2-(X+H-be)**2)
       FGP=F0P
       RETURN
@@ -781,6 +807,10 @@ C      PSZ(I)=0.3
       COMMON/GEO/ H,R,D,D1,D2,Z1,Hreal,r0
       common/ellips/ae,be
 	DOUBLE PRECISION F0,ae,be,ce
+
+      REAL CLAAE, CLABE, CLAOR, CLAA, CLATK, CLAH
+      COMMON /CLA/ CLAAE, CLABE, CLAOR, CLAA, CLATK, CLAH
+
        D2=DSQRT(X+H)
 !     Y=x**2
 !      F0=-0.25/DSQRT(X+H)/(X+H)
@@ -792,6 +822,10 @@ C      PSZ(I)=0.3
 !     ?????
       ae=1.d0
 	be=1.d0
+
+      ae = CLAAE
+      be = CLABE
+
       ce=be*be-(X-be+H)**2
       F0=-ae/be*((-be+H+X)**2)/ce**(1.5)+1./sqrt(ce)
       FGPP=F0
@@ -803,6 +837,10 @@ C      PSZ(I)=0.3
       COMMON/GEO/ H,R,D,D1,D2,Z1,Hreal,r0
       DOUBLE PRECISION F0,ae,be,ce
 	common/ellips/ae,be
+
+      REAL CLAAE, CLABE, CLAOR, CLAA, CLATK, CLAH
+      COMMON /CLA/ CLAAE, CLABE, CLAOR, CLAA, CLATK, CLAH
+
        D2=DSQRT(X+H)
 !     Y=x**2
 !	F0=0.375/DSQRT(X+H)/(X+H)/(X+H)
@@ -814,6 +852,10 @@ C      PSZ(I)=0.3
 !     ?????
       ae=1.d0
 	be=1.d0
+
+      ae = CLAAE
+      be = CLABE
+
       ce=be*be-(X-be+H)**2
       F0=-ae/be*(3.*(-be+H+X)**3/ce**2.5+3.*(-be+H+X)/ce**1.5)          
       FGP3=F0

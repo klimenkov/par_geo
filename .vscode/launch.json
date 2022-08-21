@@ -2,13 +2,26 @@
     "version": "0.0.1",
     "configurations": [
         {
+            "name": "python (cur)",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
             "name": "giper_1.exe",
             "type": "cppdbg",
             "request": "launch",
             "targetArchitecture": "x86",
             "program": "${workspaceRoot}/bin/giper_1.exe",
             "miDebuggerPath": "gdb.exe",
-            "args": ["0.5", "0.5", "50", "1"],
+            "args": [
+                "0.5",
+                "0.5",
+                "50",
+                "1"
+            ],
             "stopAtEntry": false,
             "cwd": "${workspaceRoot}",
             // "preLaunchTask": "compile (win)"
